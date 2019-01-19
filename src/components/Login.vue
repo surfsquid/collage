@@ -1,16 +1,48 @@
 <template>
   <div>
     <h1>{{ msg }}</h1>
+    <button @click="login()">Login</button>
+    <button @click="logout()">Logout</button>
+    <div>
+      {{ session }}
+    </div>
+    <div>
+      {{ session.webId }}
+    </div>
     </div>
 </template>
 
 <script>
+import auth from 'solid-auth-client';
+
 export default {
   name: 'Login',
   props: {
     msg: String
-  }
-}
+  },
+  data() {
+    return {
+      loggedIn: false,
+      session: {},
+    };
+  },
+  mounted() {
+    auth.trackSession(session => {
+      this.loggedIn = !!session;
+      this.session = session || {};
+    });
+  },
+  methods: {
+    login() {
+      const popupUri = 'popup.html';
+
+      auth.popupLogin({ popupUri });
+    },
+    logout() {
+      auth.logout();
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
