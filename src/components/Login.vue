@@ -4,9 +4,6 @@
     <button @click="login()">Login</button>
     <button @click="logout()">Logout</button>
     <div>
-      {{ session }}
-    </div>
-    <div>
       {{ session.webId }}
     </div>
     </div>
