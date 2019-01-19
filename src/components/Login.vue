@@ -34,9 +34,8 @@ export default {
   },
   methods: {
     login() {
-      const popupUri = 'popup.html';
-
-      auth.popupLogin({ popupUri });
+      const idp = 'https://inrupt.net/';
+      auth.login(idp);
     },
     logout() {
       auth.logout();
