@@ -8,14 +8,10 @@ const store = $rdf.graph();
 export class Solid {
     fetcher = new $rdf.Fetcher(store);
 
+    // Installable as a Vue plugin, exposing an 
+    // instance to all vue components' scope.
     static install(Vue) {
         Vue.prototype.$solid = new Solid();
-    }
-
-    constructor(){
-        auth.trackSession(session => {
-            console.log('track session', session);
-        });
     }
 
     login() {
@@ -48,15 +44,18 @@ export class Solid {
     }
 
     getFriends() {
-        if (!this.session) {
-            return [];
-        } else {
-            const person = this.session.webId;
+        return new Promise((resolve) => {
+            if (!this.session) {
+                resolve([]);
+            } else {
+                const person = this.session.webId;
 
-            return this.fetcher.load(person).then(() => {
-                return store.any($rdf.sym(person), FOAF('knows'));
-            });
-        }
+                this.fetcher.load(person).then(() => {
+                    const friends = store.any($rdf.sym(person), FOAF('knows'));
+                    resolve(friends);
+                });
+            }
+        });
     }
 }
 
