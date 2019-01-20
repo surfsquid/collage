@@ -25,6 +25,8 @@ export const actions = {
     getFriends({ commit, state }) {
         return new Promise((resolve) => {
             solid.getFriends().then((friends) => {
+                commit('clearFriends');
+
                 for (const friend of friends) {
                     commit('addFriend', friend);
                 }

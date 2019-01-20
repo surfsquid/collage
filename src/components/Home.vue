@@ -4,6 +4,9 @@
 
     <button @click="logout()">Logout</button>
 
+    <h3>Name:</h3>
+    <p>{{ fullName }}</p>
+
     <h3>Friends:</h3>
     <ul class="friends">
       <li 
@@ -27,8 +30,8 @@ export default {
   computed: {
     ...mapState({
       session: 'session',
-      friends: 'profile.friends',
-      fullName: 'profile.fullName',
+      friends: state => state.profile.friends,
+      fullName: state => state.profile.fullName,
     }),
     ...mapGetters([
       'loggedIn',
@@ -37,12 +40,14 @@ export default {
   methods: {
     ...mapActions([
       'getFriends',
+      'getFullName',
       'getSession',
       'logout',
     ]),
   },
   mounted() {
     this.getSession().then(() => {
+      this.getFullName();
       this.getFriends();
     });
   },
