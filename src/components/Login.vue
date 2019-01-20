@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import auth from 'solid-auth-client';
 import $rdf from 'rdflib';
 
@@ -37,6 +38,12 @@ export default {
   mounted() {
     auth.trackSession(session => {
       this.loggedIn = !!session;
+      
+      // if (!this.loggedIn) {
+      //   this.$router.push('home');
+      //   return;
+      // }
+
       this.session = session || {};
     });
   },
@@ -59,8 +66,13 @@ export default {
 
       // Display their details
       const fullName = store.any($rdf.sym(person), FOAF('name'));
+      const friends = store.any($rdf.sym(person), FOAF('knows'));
+
       this.name = fullName.value;
+      debugger;
+      this.setFriends(friends);
     },
+    ...mapActions(['setFriends']),
   },
 };
 </script>

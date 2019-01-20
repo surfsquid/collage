@@ -12,9 +12,6 @@ export default new Router({
             path: '/',
             name: 'home',
             component: Home,
-            props: () => ({
-                msg: 'Hello World!',
-            }),
         },
         {
             path: '/login',
