@@ -5,10 +5,13 @@
     <button @click="logout()">Logout</button>
 
     <h3>Friends:</h3>
-    <ul
-      v-for="(friend, i) in friends" :key="i"
-      class="friends">
-      <li class="friends__item">{{ friend }}</li>
+    <ul class="friends">
+      <li 
+        v-for="(friend, i) in friends" :key="i"
+        class="friends__item"
+      >
+        {{ friend }}
+      </li>
     </ul>
   </div>
 </template>
