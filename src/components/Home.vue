@@ -18,10 +18,12 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex';
+import guard from '../mixins/guard';
 
 
 export default {
   name: 'Home',
+  mixins: [guard],
   computed: {
     ...mapState({
       session: 'session',
@@ -41,11 +43,6 @@ export default {
   },
   mounted() {
     this.getSession().then(() => {
-      if (!this.loggedIn) {
-        this.$router.push({ name: 'login' });
-        return;
-      }
-
       this.getFriends();
     });
   },

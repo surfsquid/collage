@@ -37,13 +37,15 @@ export default {
       this.$solid.logout();
     },
   },
-  mounted() {
-    this.getSession().then((session) => {
-      if (this.loggedIn) {
-        this.$router.push({ name: 'home' });
-      }
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getSession().then(() => {
+        if (vm.loggedIn) {
+          vm.$router.push({ name: 'home' });
+        }
+      });
     });
-  }
+  },
 };
 </script>
 
