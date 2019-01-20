@@ -2,6 +2,8 @@
   <div class="hello">
     <h1>Collage</h1>
 
+    <button @click="logout()">Logout</button>
+
     <h3>Friends:</h3>
     <ul
       v-for="(friend, i) in friends" :key="i"
@@ -12,43 +14,36 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import auth from 'solid-auth-client';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
 
 export default {
   name: 'Home',
-  data() {
-    return {
-      fullName: '',
-      friends: [],
-      session: {},
-    };
+  computed: {
+    ...mapState({
+      session: 'session',
+      friends: 'profile.friends',
+      fullName: 'profile.fullName',
+    }),
+    ...mapGetters([
+      'loggedIn',
+    ]),
   },
-  computed: mapState({
-    friends: 'friends',
-  }),
+  methods: {
+    ...mapActions([
+      'getFriends',
+      'getSession',
+      'logout',
+    ]),
+  },
   mounted() {
-    auth.trackSession(session => {
-      this.loggedIn = !!session;
-      
-      // if (!this.loggedIn) {
-      //   this.$router.push('home');
-      //   return;
-      // }
+    this.getSession().then(() => {
+      if (!this.loggedIn) {
+        this.$router.push({ name: 'login' });
+        return;
+      }
 
-      this.session = session || {};
-
-      const store = $rdf.graph();
-      const fetcher = new $rdf.Fetcher(store);
-
-      // Load the person's data into the store
-      const person = this.session.webId;
-      fetcher.load(person).then(() => {
-        // Display their details
-        this.fullName = store.any($rdf.sym(person), FOAF('name'));
-        this.friends = store.any($rdf.sym(person), FOAF('knows'));
-      });
+      this.getFriends();
     });
   },
 }

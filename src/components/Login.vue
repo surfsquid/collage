@@ -4,76 +4,46 @@
 
     <button @click="login()">Login</button>
     <button @click="logout()">Logout</button>
-    <button @click="loadProfile()">View</button>
-
-    <div v-if="name">{{ name }}</div>
-    <div v-else>No Name</div>
-
-    <div>
-      {{ session.webId }}
-    </div>
-    </div>
+  </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 import auth from 'solid-auth-client';
-import $rdf from 'rdflib';
+import Solid from '../services/Solid';
 
-
-const FOAF = $rdf.Namespace('http://xmlns.com/foaf/0.1/');
 
 export default {
   name: 'Login',
   props: {
-    msg: String
+    msg: String,
   },
-  data() {
-    return {
-      loggedIn: false,
-      name: '',
-      session: {},
-    };
-  },
-  mounted() {
-    auth.trackSession(session => {
-      this.loggedIn = !!session;
-      
-      // if (!this.loggedIn) {
-      //   this.$router.push('home');
-      //   return;
-      // }
-
-      this.session = session || {};
-    });
+  computed: {
+    ...mapState({
+      session: 'session',
+    }),
+    ...mapGetters([
+      'loggedIn',
+    ]),
   },
   methods: {
+    ...mapActions([
+      'getSession',
+    ]),
     login() {
-      const idp = 'https://inrupt.net/';
-      auth.login(idp);
+      this.$solid.login();
     },
     logout() {
-      auth.logout();
+      this.$solid.logout();
     },
-    async loadProfile() {
-      // Set up a local data store and associated data fetcher
-      const store = $rdf.graph();
-      const fetcher = new $rdf.Fetcher(store);
-
-      // Load the person's data into the store
-      const person = this.session.webId;
-      await fetcher.load(person);
-
-      // Display their details
-      const fullName = store.any($rdf.sym(person), FOAF('name'));
-      const friends = store.any($rdf.sym(person), FOAF('knows'));
-
-      this.name = fullName.value;
-      debugger;
-      this.setFriends(friends);
-    },
-    ...mapActions(['setFriends']),
   },
+  mounted() {
+    this.getSession().then((session) => {
+      if (this.loggedIn) {
+        this.$router.push({ name: 'home' });
+      }
+    });
+  }
 };
 </script>
 

@@ -1,8 +1,11 @@
 
 
 export const state = {
-    friends: [],
     session: null,
+    profile: {
+        fullName: '',
+        friends: [],
+    },
 };
 
 export default state;

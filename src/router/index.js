@@ -7,6 +7,7 @@ import Login from '../components/Login';
 Vue.use(Router);
 
 export default new Router({
+    mode: 'history',
     routes: [
         {
             path: '/',
@@ -14,10 +15,19 @@ export default new Router({
             component: Home,
         },
         {
+            path: '/access_token=*',
+            name: 'auth',
+            component: Login,
+            props: () => ({
+                msg: 'Confirming authorization.',
+            }),
+        },
+        {
             path: '/login',
             name: 'login',
             component: Login,
             props: () => ({
+                msg: "It's time to login!",
             }),
         },
     ],
