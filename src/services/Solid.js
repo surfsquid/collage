@@ -43,7 +43,6 @@ export class Solid {
                 return this.fetcher.load(person).then(() => {
                     this.fetcher.load(person).then(() => {
                         const fullName = store.any($rdf.sym(person), FOAF('name'));
-                        console.log('full Name', fullName);
                         resolve(fullName.value);
                     });
                 });
