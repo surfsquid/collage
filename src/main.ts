@@ -1,4 +1,5 @@
-import Vue from 'vue'
+import './types';
+import { default as Vue, PluginObject } from 'vue'
 import { sync } from 'vuex-router-sync';
 import Vuex from 'vuex';
 import store from './store';

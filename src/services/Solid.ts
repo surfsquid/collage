@@ -1,17 +1,19 @@
+import { default as Vue, VueConstructor, PluginObject } from 'vue';
 import auth from 'solid-auth-client';
 import $rdf from 'rdflib';
+import ISession from '../ISession';
 
 
 const FOAF = $rdf.Namespace('http://xmlns.com/foaf/0.1/');
 const store = $rdf.graph();
 
-export class Solid {
+export class Solid implements PluginObject<Solid> {
     fetcher = new $rdf.Fetcher(store);
     session = null;
 
     // Installable as a Vue plugin, exposing an 
     // instance to all vue components' scope.
-    static install(Vue) {
+    install(Vue: VueConstructor) {
         Vue.prototype.$solid = new Solid();
     }
 
@@ -26,7 +28,7 @@ export class Solid {
 
     getSession() {
         return new Promise((resolve) => {
-            auth.currentSession().then((session) => {
+            auth.currentSession().then((session: any) => {
                 this.session = session;
                 resolve(session);
             });
@@ -38,7 +40,8 @@ export class Solid {
             if (!this.session) {
                 resolve('');
             } else {
-                const person = this.session.webId;
+                const session = this.session || <ISession>{};
+                const person = session.webId;
 
                 return this.fetcher.load(person).then(() => {
                     this.fetcher.load(person).then(() => {
@@ -56,7 +59,8 @@ export class Solid {
             if (!this.session) {
                 resolve([]);
             } else {
-                const person = this.session.webId;
+                const session = this.session || <ISession>{};
+                const person = session.webId;
 
                 this.fetcher.load(person).then(() => {
                     const friend = store.any($rdf.sym(person), FOAF('knows'));
@@ -69,7 +73,7 @@ export class Solid {
                             });
                         });
                     } else {
-                        const names = [];
+                        const names = new Array<string>();
 
                         friend.forEach((f) => {
                             return this.fetcher.load(f).then(() => {

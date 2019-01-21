@@ -19,19 +19,21 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { mapState, mapActions, mapGetters } from 'vuex';
+import { State } from '../store/state';
 import guard from '../mixins/guard';
 
 
-export default {
+export const Component = Vue.extend({
   name: 'Home',
   mixins: [guard],
   computed: {
     ...mapState({
-      session: 'session',
-      friends: state => state.profile.friends,
-      fullName: state => state.profile.fullName,
+      session: (state: State) => state.session,
+      friends: (state: State) => state.profile.friends,
+      fullName: (state: State) => state.profile.fullName,
     }),
     ...mapGetters([
       'loggedIn',
@@ -51,7 +53,9 @@ export default {
       this.getFriends();
     });
   },
-}
+});
+
+export default Component;
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
