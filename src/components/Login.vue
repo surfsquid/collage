@@ -3,15 +3,11 @@
     <h1>{{ msg }}</h1>
 
     <button @click="login()">Login</button>
-    <button @click="logout()">Logout</button>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex';
-import auth from 'solid-auth-client';
-import Solid from '../services/Solid';
-
 
 export default {
   name: 'Login',
