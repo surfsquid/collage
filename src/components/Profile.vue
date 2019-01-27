@@ -1,12 +1,15 @@
 <template>
   <div class="hello">
-    <div class="picture-card">
-      <div class="picture-card-picture">
-        <img >
-      </div>
-      <div class="picture-card-caption">
-      </div>
-    </div>
+    <h1>{{ fullName }}</h1>
+    <h3>Friends:</h3>
+    <ul class="friends">
+      <li 
+        v-for="(friend, i) in friends" :key="i"
+        class="friends__item"
+      >
+        {{ friend }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -16,7 +19,7 @@ import guard from '../mixins/guard';
 
 
 export default {
-  name: 'Home',
+  name: 'Profile',
   mixins: [guard],
   computed: {
     ...mapState({

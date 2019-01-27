@@ -3,7 +3,6 @@
     <h1>{{ msg }}</h1>
 
     <button @click="login()">Login</button>
-    <button @click="logout()">Logout</button>
   </div>
 </template>
 
