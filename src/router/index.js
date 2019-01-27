@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '../components/Home';
 import Login from '../components/Login';
+import Profile from '../components/Profile';
 
 
 Vue.use(Router);
@@ -29,6 +30,11 @@ export const router = new Router({
             props: () => ({
                 msg: "It's time to login!",
             }),
+        },
+        {
+            path: '/profile',
+            name: 'profile',
+            component: Profile,
         },
     ],
 });
